@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <!-- Main Content Column -->
+    <div class="col-lg-8">
+        <!-- Page Header -->
+        <div class="mb-5 text-center">
+            <h1 class="display-5 fw-bold text-primary mb-3">Latest Blog Posts</h1>
+            <p class="lead text-muted">Discover amazing content from our community</p>
+        </div>
+
+        <!-- Blog Posts -->
+        {% for post in posts %}
+        <div class="card shadow-sm border-0 mb-4 post-card">
+            {% if post.image %}
+            <div class="post-image-container">
+                <img src="{{ post.image.url }}" class="card-img-top post-image" alt="{{ post.title }}">
+            </div>
+            {% endif %}
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="badge bg-primary bg-opacity-10 text-primary fs-6">
+                        {{ post.category|default:"Uncategorized" }}
+                    </span>
+                    <small class="text-muted">
+                        <i class="fas fa-clock me-1"></i>{{ post.date_posted|timesince }} ago
+                    </small>
+                </div>
+                
+                <h2 class="card-title h4 fw-bold mb-3">
+                    <a href="{% url 'post-detail' post.pk %}" class="text-decoration-none text-dark">
+                        {{ post.title }}
+                    </a>
+                </h2>
+                
+                <p class="card-text text-muted mb-4 fs-6 lh-base">
+                    {{ post.content|striptags|truncatewords:40 }}
+                </p>
+                
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-user text-muted me-2"></i>
+                        <span class="text-muted">{{ post.author }}</span>
+                    </div>
+                    <a href="{% url 'post-detail' post.pk %}" class="btn btn-primary btn-sm px-3 py-2">
+                        Read More <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <!-- Empty State -->
+        <div class="text-center py-5">
+            <div class="empty-state-icon mb-4">
+                <i class="fas fa-blog fa-4x text-muted opacity-25"></i>
+            </div>
+            <h3 class="h4 text-muted mb-3">No Posts Available</h3>
+            <p class="text-muted mb-4">Check back soon for new content!</p>
+            {% if user.is_authenticated and user.is_staff %}
+            <a href="/admin/blog/post/add/" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Create First Post
+            </a>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Sidebar Column -->
+    <div class="col-lg-4">
+        <!-- Categories Card -->
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-primary text-white py-3">
+                <h5 class="mb-0">
+                    <i class="fas fa-folder me-2"></i>Categories
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush">
+                    {% for category in categories %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center border-0 py-3">
+                        <a href="#" class="text-decoration-none text-dark">
+                            <i class="fas fa-folder-open me-2 text-primary"></i>{{ category.name }}
+                        </a>
+                        <span class="badge bg-primary rounded-pill">{{ category.post_set.count }}</span>
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item text-muted text-center py-4 border-0">
+                        <i class="fas fa-inbox me-2"></i>No categories yet
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- User Welcome Card -->
+        {% if user.is_authenticated %}
+        <div class="card shadow-sm border-0 mb-4 bg-success bg-opacity-10 border-success">
+            <div class="card-body text-center p-4">
+                <div class="mb-3">
+                    <i class="fas fa-user-circle fa-3x text-success"></i>
+                </div>
+                <h5 class="card-title text-success">Welcome back!</h5>
+                <p class="card-text text-muted mb-3">Hello, <strong>{{ user.username }}</strong>!</p>
+                <p class="small text-muted">You can read posts and leave comments.</p>
+            </div>
+        </div>
+        {% else %}
+        <!-- Registration Card -->
+        <div class="card shadow-sm border-0 mb-4 bg-primary bg-opacity-10 border-primary">
+            <div class="card-body text-center p-4">
+                <div class="mb-3">
+                    <i class="fas fa-user-plus fa-3x text-primary"></i>
+                </div>
+                <h5 class="card-title text-primary">Join Our Community</h5>
+                <p class="card-text text-muted mb-3">Register to comment on posts and more!</p>
+                <a href="{% url 'register' %}" class="btn btn-primary w-100">
+                    <i class="fas fa-user-plus me-2"></i>Register Now
+                </a>
+                <div class="mt-2">
+                    <small class="text-muted">Already have an account? 
+                        <a href="{% url 'login' %}" class="text-primary text-decoration-none">Login here</a>
+                    </small>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Stats Card -->
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-info text-white py-3">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-bar me-2"></i>Blog Stats
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-6 mb-3">
+                        <div class="stat-number text-primary fw-bold fs-4">{{ posts.count }}</div>
+                        <div class="stat-label text-muted small">Total Posts</div>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <div class="stat-number text-success fw-bold fs-4">{{ categories.count }}</div>
+                        <div class="stat-label text-muted small">Categories</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

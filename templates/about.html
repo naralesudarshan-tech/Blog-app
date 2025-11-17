@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}About{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="text-center">About MyBlog</h1>
+            </div>
+            <div class="card-body">
+                <p class="lead">
+                    Welcome to MyBlog - your personal blogging platform built with Django!
+                </p>
+                
+                <h3>Features</h3>
+                <ul>
+                    <li>Create and manage blog posts</li>
+                    <li>Categorize your content</li>
+                    <li>Commenting system</li>
+                    <li>User authentication</li>
+                    <li>Responsive design</li>
+                    <li>Admin panel for content management</li>
+                </ul>
+
+                <h3>Technology Stack</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul>
+                            <li><strong>Backend:</strong> Django Python</li>
+                            <li><strong>Database:</strong> SQLite</li>
+                            <li><strong>Frontend:</strong> HTML, CSS, Bootstrap</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul>
+                            <li><strong>Authentication:</strong> Django Auth</li>
+                            <li><strong>Admin:</strong> Django Admin</li>
+                            <li><strong>Styling:</strong> Custom CSS</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>About the Developer</h3>
+                <p>
+                    This blog platform was created as a demonstration of Django web development 
+                    capabilities. It showcases how to build a complete CRUD application with 
+                    user authentication and a responsive interface.
+                </p>
+
+                <div class="alert alert-info mt-4">
+                    <h5>Get Started</h5>
+                    <p class="mb-0">
+                        Register for an account to start reading and commenting on posts, 
+                        or log in to access all features!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
